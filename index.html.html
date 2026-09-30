@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Little Princess✨</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;600&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; touch-action: manipulation; }
+
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #ffdde1, #ee9ca7, #e2d1f9, #ffdde1);
+            background-size: 400% 400%;
+            animation: cloudBG 20s ease infinite;
+            font-family: 'Montserrat', sans-serif;
+            overflow: hidden;
+            color: #333;
+        }
+
+        @keyframes cloudBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .particle {
+            position: absolute;
+            pointer-events: none;
+            background: white;
+            border-radius: 50%;
+            animation: fadeOut 1s linear forwards;
+            filter: drop-shadow(0 0 5px #ffccd5);
+        }
+
+        @keyframes fadeOut {
+            0% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0); }
+        }
+
+        .liquid-glass-card {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-radius: 50px 20px 50px 20px;
+            padding: 40px 25px;
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            max-height: 85vh; /* Card එක ස්ක්‍රීන් එකට වඩා උස යන එක නවත්තනවා */
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 15px 35px rgba(238, 156, 167, 0.3);
+            z-index: 100;
+            transition: all 0.5s ease-out;
+            background-image: linear-gradient(120deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 50%, rgba(255,255,255,0.3) 100%);
+            background-size: 200% 100%;
+            animation: liquidSheen 5s linear infinite;
+        }
+
+        /* මැසේජ් එකට විතරක් Scroll එක දෙන කොටස */
+        .message-content {
+            overflow-y: auto;
+            margin: 15px 0;
+            padding: 0 10px;
+            scrollbar-width: thin;
+            scrollbar-color: #ff6b81 transparent;
+        }
+
+        .message-content::-webkit-scrollbar {
+            width: 4px;
+        }
+        .message-content::-webkit-scrollbar-thumb {
+            background: #ff6b81;
+            border-radius: 10px;
+        }
+
+        @keyframes liquidSheen {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        h1 { font-family: 'Dancing Script', cursive; font-size: 2.5rem; margin-bottom: 10px; color: #ff6b81; text-shadow: 1px 1px 5px rgba(255, 107, 129, 0.3); }
+        p { font-size: 1rem; line-height: 1.6; opacity: 0.9; color: #444; }
+
+        .big-heart {
+            font-size: 80px;
+            cursor: pointer;
+            display: inline-block;
+            margin: 20px 0;
+            animation: beat 1s infinite alternate;
+            filter: drop-shadow(0 0 10px #ffccd5);
+        }
+
+        @keyframes beat { to { transform: scale(1.15); } }
+
+        .btn-container { margin-top: 20px; display: flex; justify-content: center; gap: 15px; height: 50px; position: relative; }
+        
+        .btn {
+            padding: 12px 35px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        #yesBtn { background: #ff6b81; color: white; box-shadow: 0 5px 15px rgba(255, 107, 129, 0.3); }
+        #noBtn { background: rgba(255, 255, 255, 0.8); color: #ff6b81; border: 1px solid #ffccd5; position: absolute; }
+    </style>
+</head>
+<body onmousemove="createParticle(event)" ontouchmove="createParticle(event)">
+
+    <div class="liquid-glass-card" id="mainCard">
+        <div id="step1">
+            <h1>Hi My Little Princess</h1>
+            <div class="big-heart" onclick="nextStep()">🎁</div>
+            <p>I have a little secret for you... Tap the gift.</p>
+        </div>
+
+        <div id="step2" style="display:none;">
+            <h1>I Love You! ❤️</h1>
+            <div class="message-content">
+                <p>මෙතන ඔයාට දාන්න ඕනි මැසේජ් එක ටයිප් කරන්න."GF ට පේන්න ඕනි එක"</p>
+            </div>
+            <div class="btn-container">
+                <button class="btn" id="yesBtn" onclick="celebrate()">YES!</button>
+                <button class="btn" id="noBtn" onmouseover="dodge()">No</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function createParticle(e) {
+            const x = e.pageX || (e.touches ? e.touches[0].pageX : 0);
+            const y = e.pageY || (e.touches ? e.touches[0].pageY : 0);
+            const numParticles = e.touches ? 3 : 1;
+            for (let i = 0; i < numParticles; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                p.style.width = Math.random() * 8 + 4 + 'px';
+                p.style.height = p.style.width;
+                p.style.left = x + (Math.random() - 0.5) * 10 + 'px';
+                p.style.top = y + (Math.random() - 0.5) * 10 + 'px';
+                document.body.appendChild(p);
+                setTimeout(() => p.remove(), 1000);
+            }
+        }
+
+        function nextStep() {
+            document.getElementById('step1').style.display = 'none';
+            document.getElementById('step2').style.display = 'flex';
+            document.getElementById('step2').style.flexDirection = 'column';
+            setInterval(createFloatingHeart, 600);
+        }
+
+        function dodge() {
+            const btn = document.getElementById('noBtn');
+            btn.style.left = Math.random() * 70 + '%';
+            btn.style.top = Math.random() * 70 + '%';
+            btn.style.position = 'fixed';
+        }
+
+        function celebrate() {
+            confetti({ particleCount: 300, spread: 160, origin: { y: 0.6 } });
+            document.getElementById('mainCard').innerHTML = "<h1>Yay! 😍</h1><p>I'm so happy! ❤️ Redirecting to WhatsApp...</p>";
+            setTimeout(() => {
+                const phoneNumber = "94754300528"; 
+                const msg = "I said YES! ❤️ I love you too";
+                window.location.href = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(msg)}`;
+            }, 2000);
+        }
+
+        function createFloatingHeart() {
+            const h = document.createElement('div');
+            h.innerHTML = Math.random() > 0.5 ? '❤️' : '💖';
+            h.style.position = 'absolute';
+            h.style.left = Math.random() * 100 + 'vw';
+            h.style.bottom = '-50px';
+            h.style.fontSize = Math.random() * 20 + 20 + 'px';
+            h.style.color = '#ffccd5';
+            h.style.transition = '6s linear';
+            h.style.pointerEvents = 'none';
+            document.body.appendChild(h);
+            setTimeout(() => {
+                h.style.transform = `translateY(-110vh) rotate(${Math.random() * 360}deg)`;
+                h.style.opacity = '0';
+            }, 100);
+            setTimeout(() => h.remove(), 7000);
+        }
+    </script>
+</body>
+</html>
